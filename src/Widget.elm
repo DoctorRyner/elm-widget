@@ -25,14 +25,17 @@ widgetUpdate msg widget_ =
     let (updatedWidget, widgetCmd) = widget_.info.update msg widget_.val
     in ({ widget_ | val = updatedWidget }, Cmd.map widget_.link widgetCmd)
 
-type alias WidgetMsg msg = { msg : msg, id : Int }
-
 type alias WidgetCell msg model a = { id : Int, widget : Widget msg model a }
 
-type alias WidgetBox msg model a = { widgets : List (WidgetCell msg model a), ratio : Int }
+type alias WidgetBox msg model a =
+    { link : (msg -> a)
+    , info : WidgetInfo msg model
+    , ratio : Int
+    , widgets : List (WidgetCell msg model a)
+    }
 
-widgetNewBox : WidgetBox msg model a
-widgetNewBox = { widgets = [], ratio = 0 }
+widgetNewBox : (msg -> a) -> WidgetInfo msg model -> WidgetBox msg model a
+widgetNewBox link info = { link = link, info = info, ratio = 0, widgets = [] }
 
 widgetAdd : Widget msg model a -> WidgetBox msg model a -> WidgetBox msg model a
 widgetAdd widget_ box = { box | widgets = box.widgets ++ [ WidgetCell box.ratio widget_ ], ratio = box.ratio + 1 }
