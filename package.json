@@ -1,0 +1,7 @@
+{
+  "name": "gui",
+  "dependencies": {},
+  "devDependencies": {
+    "elm-live": "^3.4.0"
+  }
+}

@@ -1,0 +1,7 @@
+default: sae dev
+
+init: npm i
+
+build: elm make src/Main.elm --optimize --output build/index.html
+
+dev: node_modules/.bin/elm-live src/Main.elm --open -- --debug
