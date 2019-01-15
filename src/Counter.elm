@@ -6,27 +6,29 @@ import Time
 
 import Utils exposing (pure, send)
 
-type Msg = Inc | Dec | Tick Time.Posix
+type Msg = Inc | Dec | Tick Time.Posix | Switch
 
-type alias Model = Int
+type alias Model = { val : Int, isOn : Bool }
 
 init : Model
-init = 0
+init = { val = 0, isOn = True }
 
 update : Msg -> Model -> (Model, Cmd Msg)
-update msg val = case msg of
-    Inc    -> pure <| val + 1
-    Dec    -> pure <| val - 1
-    Tick _ -> (val, send Inc)
+update msg model = case msg of
+    Inc    -> pure <| { model | val = model.val + 1 }
+    Dec    -> pure <| { model | val = model.val - 1 }
+    Tick _ -> (model, send Inc)
+    Switch -> pure { model | isOn = not model.isOn }
 
 view : Model -> Html Msg
-view val = div []
+view model = div []
     [ button [ onClick Inc ] [ text "+" ]
-    , text <| String.fromInt val
+    , text <| String.fromInt model.val
     , button [ onClick Dec ] [ text "-" ]
+    , button [ onClick Switch ] [ text <| if model.isOn then "off" else "on" ]
     ]
 
-subs : Sub Msg
-subs = Time.every 1000 Tick
+subs : Model -> Sub Msg
+subs model = if model.isOn then Time.every 2000 Tick else Sub.none
 
 info = { update = update, view = view, init = init, subs = subs }
