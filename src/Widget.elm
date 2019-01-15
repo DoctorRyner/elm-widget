@@ -75,5 +75,5 @@ add_ box_ = { box_ | widgets = box_.widgets ++ [ Cell box_.ratio box_.info.init 
 subs : Widget msg model a -> Sub a
 subs widget = Sub.map widget.link widget.info.subs
 
--- subsBox : Widget msg model a -> Sub a
--- subsBox box_ = 
+subsBox : Box msg model a -> Sub a
+subsBox box_ = Sub.batch <| List.map (\w -> Sub.map (\msg -> box_.link msg w.id) box_.info.subs) box_.widgets
