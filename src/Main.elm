@@ -9,27 +9,24 @@ import Widget exposing (..)
 import Counter
 import Switch
 
-type Msg = CounterMsg Counter.Msg Int
+type Msg = NoEff
 
 type alias Model =
-    { counterBox : WidgetBox Counter.Msg Counter.Model Msg
+    {
     }
 
 init : () -> (Model, Cmd Msg)
 init _ = pure
-    { counterBox = widgetBoxNew CounterMsg Counter.info
+    { 
     }
 
 view : Model -> Html Msg
 view model = div []
-    [ widgetBox model.counterBox
+    [ 
     ]
 
 update : Msg -> Model -> (Model, Cmd Msg)
-update msg model = case msg of
-    CounterMsg boxMsg id -> let (m, c) = widgetBoxUpdate boxMsg model.counterBox id in ({ model | counterBox = m}, c)
-    -- case msg of
-    -- CounterMsg subMsg -> let (m, c) = widgetUpdate subMsg model.counter in ({ model | counter = m }, c)
+update msg model = pure model
 
 subs : Model -> Sub Msg
 subs model = Sub.none
