@@ -4,6 +4,7 @@ import Html.Styled exposing (..)
 import Html.Styled.Events exposing (onClick)
 import String exposing (fromInt)
 import Widget exposing (WidgetInfo)
+import Utils exposing (send)
 
 type alias Model = { count : Int }
 
@@ -26,5 +27,4 @@ update message model =
         Inc -> ( { model | count = model.count + 1 }, Cmd.none )
         Dec -> ( { model | count = model.count - 1 }, Cmd.none )
 
-info : WidgetInfo Msg Model
 info = { update = update, view = view, init = init }
