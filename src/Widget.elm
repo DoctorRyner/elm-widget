@@ -7,16 +7,18 @@ type alias Info msg model =
     { update : (msg -> model -> (model, Cmd msg))
     , view : model -> Html msg
     , init : model
+    , subs : Sub msg
     }
 
 type alias Widget msg model a =
     { link : (msg -> a)
     , info : Info msg model
     , val  : model
+    , subs : Sub msg
     }
 
 new : (msg -> a) -> Info msg model -> Widget msg model a
-new link info = Widget link info info.init 
+new link info = Widget link info info.init info.subs
 
 show : Widget msg model a -> Html a
 show widget_ = Html.Styled.map widget_.link <| widget_.info.view widget_.val
@@ -70,5 +72,8 @@ add widget_ box_ = { box_ | widgets = box_.widgets ++ [ Cell box_.ratio widget_ 
 add_ : Box msg model a -> Box msg model a
 add_ box_ = { box_ | widgets = box_.widgets ++ [ Cell box_.ratio box_.info.init ], ratio = box_.ratio + 1 }
 
+subs : Widget msg model a -> Sub a
+subs widget = Sub.map widget.link widget.info.subs
 
-
+-- subsBox : Widget msg model a -> Sub a
+-- subsBox box_ = 
